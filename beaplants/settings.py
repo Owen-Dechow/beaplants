@@ -60,7 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "BEAPlants.urls"
+ROOT_URLCONF = "beaplants.urls"
 
 TEMPLATES = [
     {
