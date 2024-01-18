@@ -1,1 +1,1 @@
-web: gunicorn BEAPlants.wsgi:application -log-file -
+web: gunicorn beaplants.wsgi:application --log-file -
