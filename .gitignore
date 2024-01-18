@@ -1,0 +1,8 @@
+venv/
+emails/
+.DS_STORE
+db.sqlite3
+.env
+__pycache__/
+images/
+BEAPlants_accessKeys.csv
