@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link href="{% static 'css/product_submissions.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/form.css' %}" rel="stylesheet" />
+  <script src="{% static 'js/product_submissions.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <form method="post" enctype="multipart/form-data" class="add-product">
+    {% csrf_token %}
+    <div>{{ form.name.label_tag }}
+      {{ form.name.errors }}
+      {{ form.name }}</div>
+
+    <div>{{ form.quantity_in_stalk.label_tag }}
+      {{ form.quantity_in_stalk.errors }}
+      {{ form.quantity_in_stalk }}</div>
+
+    <div>{{ form.size.label_tag }}
+      {{ form.size.errors }}
+      {{ form.size }}</div>
+
+    <div>{{ form.logo.label_tag }}
+      {{ form.logo.errors }}
+      {{ form.logo }}</div>
+
+    <div>{{ form.images.label_tag }}
+      {{ form.images.errors }}
+      {{ form.images }}</div>
+
+    <div>{{ form.production_cost.label_tag }}
+      {{ form.production_cost.errors }}
+      {{ form.production_cost }}</div>
+
+    <div>{{ form.description.label_tag }}
+      {{ form.description.errors }}
+      {{ form.description }}</div>
+
+    <div>{{ form.add_key.label_tag }}
+      {{ form.add_key.errors }}
+      {{ form.add_key }}</div>
+
+    <div>
+      {{ form.group_members.label_tag }}
+      {{ form.group_members.errors }}
+      <div class="group-members" id="group-members">
+        {{ form.group_members }}
+        <template id="member-template">
+          <div class="card">
+            <label for="first">First Name:</label><input id="first" class="first" type="text" onchange="justifyCards(event)" required />
+            <label for="last">Last Name:</label><input id="last" class="last" type="text" onchange="justifyCards(event)" required />
+            <button type="button" onclick="removeMember(event)">remove</button>
+          </div>
+        </template>
+
+        <div class="cards">
+          <button type="button" onclick="addMember()">add</button>
+        </div>
+      </div>
+      <script>
+        if (document.querySelector("input[name='group_members']").value == 'null') addMember()
+        else updateCardsToJSON()
+      </script>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

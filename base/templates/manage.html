@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+  <link href="{% static 'css/manage.css' %}" rel="stylesheet" />
+  <script src="{% static 'js/manage.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <details class="season">
+    <summary>Orders</summary>
+    <div class="orders">
+      {% for order in orders %}
+        <form action="close-order/{{ order.id }}" class="order" onsubmit="confirmCloseOrder(event)" method="post">
+          {% csrf_token %}
+          <p>
+            <span>Product:</span> <i>{{ order.product.name }}</i>
+          </p>
+          <p>
+            <span>Name:</span> <i>{{ order.name }}</i>
+          </p>
+          <p>
+            <span>Email:</span> <i>{{ order.email }}</i>
+          </p>
+          <p>
+            <span>Number:</span> <i>{{ order.phone_number }}</i>
+          </p>
+          {% if order.donation %}
+            <p>
+              <span>Donation:</span> <i>${{ order.donation }}</i>
+            </p>
+          {% endif %}
+          <p>
+            <span>Student selected to deliver product:</span> <i>{{ order.student_deliverer }}</i>
+          </p>
+          <button type="submit">Close Order</button>
+        </form>
+      {% endfor %}
+    </div>
+  </details>
+
+  <template id="markup-card-template">
+    <div class="card">
+      <label for="markup-days">Days <span>#</span></label>
+      <input class="markup-days" id="markup-days" type="number" required onchange="markupCardValueChange(event)" />
+      <label for="markup-percent">Markup <span>%</span></label>
+      <input class="markup-percent" id="markup-percent" type="number" required onchange="markupCardValueChange(event)" min="0" />
+      <button type="button" onclick="removeMarkupCard(event)">remove</button>
+    </div>
+  </template>
+
+  {% for season in seasons %}
+    <details class="season" open>
+      <summary>{{ season }}</summary>
+      <div>
+        {% if forloop.counter == 1 %}
+          <h1>Add Prodct Key: <i>{{ season.get_current_key }}</i></h1>
+        {% else %}
+          <h1>Products Can No Longer Be Added To This Season.</h1>
+        {% endif %}
+        <a href="/pull-data/{{ season.id }}">Pull Data</a>
+        <details class="settings">
+          <summary>Settings</summary>
+          <form class="edit-form" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="season_id" value="{{ season.id }}" />
+
+            <div>
+              <label for="sales_date_start-{{ season.id }}">Sales Start Date:</label>
+              {% if form.season_id.value == season.string_id %}
+                {{ form.sales_date_start.errors }}
+                <input type="date" name="sales_date_start" id="sales_date_start-{{ season.id }}" required value="{{ form.sales_date_start.value }}" />
+              {% else %}
+                <input type="date" name="sales_date_start" id="sales_date_start-{{ season.id }}" required value="{{ season.valid_sales_date_start_format }}" />
+              {% endif %}
+            </div>
+
+            <div>
+              <label for="contacts-{{ season.id }}">Contact Info:</label>
+              {% if form.season_id.value == season.string_id %}
+                {{ form.contacts.errors }}
+                <textarea name="contacts" id="contacts-{{ season.id }}" required>{{ form.contacts.value }}</textarea>
+              {% else %}
+                <textarea name="contacts" id="contacts-{{ season.id }}" required>{{ season.contacts }}</textarea>
+              {% endif %}
+            </div>
+
+            <div>
+              <label for="markup-{{ season.id }}">Markup:</label>
+              {% if form.season_id.value == season.string_id %}
+                {{ form.markup.errors }}
+              {% endif %}
+              <div class="markup-editor" id="markup-editor-{{ season.id }}">
+                {% if form.season_id.value == season.string_id %}
+                  <input type="json" name="markup" id="markup-{{ season.id }}" required readonly value="{{ form.markup.value }}" />
+                {% else %}
+                  <input type="json" name="markup" id="markup-{{ season.id }}" required readonly value="{{ season.valid_markup_json }}" />
+                {% endif %}
+
+                <div class="cards">
+                  <button type="button" onclick="addMarkupCard('markup-editor-{{ season.id }}')">add</button>
+                </div>
+                <script>
+                  updateCardsToJSON('markup-editor-{{season.id}}')
+                </script>
+              </div>
+            </div>
+
+            <button type="submit">Update Season</button>
+            <button type="button" onclick="deleteSeason({{ season.id }})">Delete Season</button>
+          </form>
+        </details>
+      </div>
+    </details>
+  {% endfor %}
+
+  <details class="season">
+    <summary>New Season</summary>
+    <div>
+      <form class="edit-form" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="season_id" value="-1" />
+
+        <div>
+          <label for="sales_date_start">Sales Start Date:</label>
+          {% if form.season_id.value == '-1' %}
+            {{ form.sales_date_start.errors }}
+            <input type="date" name="sales_date_start" id="sales_date_start" required value="{{ form.sales_date_start.value }}" />
+          {% else %}
+            <input type="date" name="sales_date_start" id="sales_date_start" required />
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="contacts">Contact Info:</label>
+          {% if form.season_id.value == '-1' %}
+            {{ form.contacts.errors }}
+            <textarea name="contacts" id="contacts" required>{{ form.contacts.value }}</textarea>
+          {% else %}
+            <textarea name="contacts" id="contacts" required></textarea>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="markup">Markup:</label>
+          {% if form.season_id.value == '-1' %}
+            {{ form.markup.errors }}
+          {% endif %}
+
+          <div class="markup-editor" id="markup-editor">
+            {% if form.season_id.value == '-1' %}
+              <input type="json" name="markup" id="markup" required readonly value="{{ form.markup.value }}" />
+            {% else %}
+              <input type="json" name="markup" id="markup" required readonly />
+            {% endif %}
+
+            <div class="cards">
+              <button type="button" onclick="addMarkupCard('markup-editor')">add</button>
+            </div>
+            <script>
+              if (document.getElementById('sales_date_start').value) updateCardsToJSON('markup-editor')
+              else addMarkupCard('markup-editor')
+            </script>
+          </div>
+        </div>
+
+        <button type="submit">Add New Product Season</button>
+      </form>
+    </div>
+  </details>
+{% endblock %}

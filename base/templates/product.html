@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+
+{% block head %}
+  <script src="{% static 'js/product.js' %}"></script>
+  <script src="{% static 'js/utils.js' %}"></script>
+  <link href="{% static 'css/product.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/carousel.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <script>
+    productId = '{{ product.id }}'
+    sendProductViewReport()
+  </script>
+
+  <div class="top-section">
+    {% if product.sold_out %}
+      <div class="sold-out-warning">Sold Out</div>
+    {% endif %}
+
+    <img src="{{ product.logo.url }}" alt="Product Image" />
+
+    <div class="float-right">
+      <h1>{{ product.name }}</h1>
+      <p>{{ product.description }}</p>
+      <p>
+        Framers:{% for first, last in product.group_members.items %}
+          {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      </p>
+      <p>Price: {{ product.formatted_price }}</p>
+      <p>Quantity Remaining: {{ product.quantity_in_stalk }}</p>
+    </div>
+  </div>
+
+  <div class="carousel" id="image-carousel" index="2">
+    <div class="carousel-items">
+      {% for img in images %}
+        <img class="carousel-item" src="{{ img.image.url }}" alt="Product Image" />
+      {% endfor %}
+    </div>
+    <div class="carousel-controls">
+      <button type="button" onclick="moveCarousel(-1, 'image-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
+      <button type="button" onclick="moveCarousel(1, 'image-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
+    </div>
+    <script>
+      moveCarousel(0, 'image-carousel')
+    </script>
+  </div>
+  {% if product.can_be_sold %}
+    <form method="POST" class="product-order-form">
+      {% if form.errors %}
+        <div class="error-warning">
+          <h1>Oops! Somthing Went Wrong! :(</h1>
+          <p>Check order form for more details.</p>
+          <button onclick="clearParent(event)">x</button>
+        </div>
+      {% endif %}
+
+      <h1>Order Now</h1>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="product-order-form-fields">
+        {{ form.name.errors }}
+        <div class="field">{{ form.name.label_tag }}
+          {{ form.name }}</div>
+
+        {{ form.email.errors }}
+        <div class="field">{{ form.email.label_tag }}
+          {{ form.email }}</div>
+
+        {{ form.phone_number.errors }}
+        <div class="field">{{ form.phone_number.label_tag }}
+          {{ form.phone_number }}</div>
+
+        {{ form.student_deliverer.errors }}
+        <div class="field">{{ form.student_deliverer.label_tag }}
+          {{ form.student_deliverer }}</div>
+
+        {{ form.donation.errors }}
+        <div class="field">
+          {{ form.donation.label_tag }}
+          <span class="donation-set off">
+            <label for="toggle-input" class="toggle">
+              <input onchange="toggleDonation(event)" id="toggle-input" type="checkbox" />
+              <span class="slider"></span>
+            </label>
+            $
+            {{ form.donation }}
+          </span>
+        </div>
+
+        {{ form.user_id }}
+      </div>
+
+      <div class="field">
+        <button>SEND ORDER <span>&#10095;&#10095;</span></button>
+      </div>
+
+      <script>
+        document.getElementById('donation-input').disabled = true
+        document.getElementById('toggle-input').checked = false
+        document.getElementById('uid-input').value = getuid()
+      </script>
+    </form>
+  {% endif %}
+{% endblock %}

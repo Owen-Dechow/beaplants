@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+  <link href="{% static 'css/form.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+  <form method="POST">
+    <h1>Login</h1>
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Login</button>
+    <a href="password_reset">Forgot Password?</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        BEA Plants
+      {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <script src="{% static 'js/utils.js' %}"></script>
+
+    {% block head %}
+
+    {% endblock %}
+  </head>
+
+  <body>
+    <nav>
+      <a href="/">
+        <img src="{% static 'media/BEALogo.png' %}" alt="BEA Logo" />
+        <span>Bald Eagle FFA Plants</span>
+      </a>
+    </nav>
+    <main>
+      {% block main %}
+
+      {% endblock %}
+    </main>
+    <footer>
+      <div>
+        <ul>
+          <li>
+            <a href="/manage">Management</a>
+            {% if user.is_authenticated %}
+              <form action="/logout" method="post">
+                {% csrf_token %}- <button type="submit">Logout</button>
+              </form>
+            {% endif %}
+          </li>
+          <li>
+            <a href="/product-submissions">Product Submissions</a>
+          </li>
+          <li>
+            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Credits</a>
+          </li>
+        </ul>
+      </div>
+      <span>i</span>
+    </footer>
+  </body>
+</html>

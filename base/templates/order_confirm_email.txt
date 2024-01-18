@@ -1,0 +1,13 @@
+Thank you for your order!
+Your order for one {{ product.name }} from BEAPlants ({{ url }}) has been received.
+
+Please confirm the following information:
+  Your name: {{ order.name }}
+  Your email: {{ order.email }}
+  Your number: {{ order.phone_number }}{% if order.donation %}
+  Your donation: ${{ order.donation }}{% endif %}
+  Student selected to deliver product: {{ order.student_deliverer }}
+
+If there are any problems please use the contact information below:{% for c in contacts %}  
+  {{ c }}
+  {% endfor %}
