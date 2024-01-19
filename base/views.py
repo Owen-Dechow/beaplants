@@ -57,7 +57,7 @@ def manage_page(request: WSGIRequest):
         if request.POST["season_id"] == "-1":
             instance = models.Season(
                 add_key=keys.create_secret_key(
-                    models.Season._meta.get_field("markup").max_length
+                    models.Season._meta.get_field("add_key").max_length
                 )
             )
         else:
