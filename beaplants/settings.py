@@ -19,7 +19,7 @@ import django_heroku
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / ".env")
+env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -176,8 +176,16 @@ else:
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = BASE_DIR / "emails"
+if env("USE_LOCAL_EMAIL", bool, True):
+    EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = BASE_DIR / "emails"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER", str)
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", str)
 
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
