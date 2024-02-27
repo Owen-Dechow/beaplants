@@ -50,7 +50,7 @@ class Product(models.Model):
     def price(self):
         return self.production_cost + self.production_cost * self.season.get_markup()
 
-    def formmated_price(self):
+    def formatted_price(self):
         return "${:,.2f}".format(self.price())
 
     def sold_out(self):
