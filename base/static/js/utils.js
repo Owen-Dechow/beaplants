@@ -70,3 +70,8 @@ function moveCarousel(dist, carouselId) {
 function clamp(min, num, max) {
     return Math.max(Math.min(num, max - 1), min);
 }
+
+function confirmCookies(event) {
+    setCookie("cookieOK", "true", 3);
+    event.target.parentNode.remove();
+}

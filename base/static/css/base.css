@@ -130,3 +130,47 @@ footer ul {
   padding-left: 25px;
   width: var(--expanded-width);
 }
+
+
+.cookies {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+  background-color: var(--gold);
+  padding: 5px;
+  margin-right: 10px;
+  max-width: 600px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+}
+
+.cookies>button {
+  background-color: var(--blue1);
+  border-radius: 2px;
+  border: 1px solid;
+  color: var(--text);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.cookies>h1 {
+  width: 100%;
+  text-align: left;
+  margin-block: 10px;
+}
+
+@media (max-width: 800px) {
+  .cookies {
+    max-width: 100%;
+    width: calc(100% - 30px);
+    text-align: center;
+  }
+
+  .cookies>h1 {
+    text-align: center;
+  }
+}

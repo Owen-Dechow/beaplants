@@ -46,11 +46,21 @@
             <a href="/product-submissions">Product Submissions</a>
           </li>
           <li>
-            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Credits</a>
+            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Website Creator - Owen Dechow</a>
           </li>
         </ul>
       </div>
       <span>i</span>
     </footer>
+    <div class="cookies" id="cookies">
+      <h1>This site uses cookies!</h1>
+      <span>By using this website you are accepting all cookies used for authentication and maketing analysis. No third party cookies are sanctioned by BEA Plants and no information will be shared with third parties. Thank you!</span>
+      <button type="button" onclick="confirmCookies(event)">OK</button>
+    </div>
+    <script>
+      if (getCookie('cookieOK') == 'true') {
+        document.querySelector('#cookies').remove()
+      }
+    </script>
   </body>
 </html>
