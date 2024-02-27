@@ -1,0 +1,85 @@
+form {
+    background-color: var(--blue1);
+    width: fit-content;
+    padding: 10px;
+    border-bottom: 5px solid var(--gold);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    margin-inline: auto;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+form input,
+form button,
+form textarea,
+form select {
+    background-color: var(--blue2);
+    color: var(--text);
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+form button {
+    cursor: pointer;
+}
+
+form a {
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+}
+
+form a:hover {
+    text-decoration: underline;
+}
+
+form h1 {
+    text-align: center;
+    margin-block: 10px;
+}
+
+form .errorlist {
+    background-color: var(--red);
+    list-style: none;
+    padding: 3px;
+    font-weight: bold;
+    max-width: 400px;
+}
+
+form .helptext {
+    display: none;
+}
+
+form p {
+    max-width: 400px;
+    margin: 0;
+    margin-bottom: 20px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+form textarea {
+    display: block;
+}
+
+@media (max-width: 500px) {
+    form {
+        margin: 10px;
+        box-sizing: border-box;
+        width: calc(100% - 20px);
+    }
+
+    form div {
+        display: grid;
+    }
+
+    form .errorlist,
+    form p {
+        max-width: 100%;
+    }
+}
