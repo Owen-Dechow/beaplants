@@ -79,6 +79,7 @@ def manage_page(request: WSGIRequest):
 @transaction.atomic
 def product_submissions_page(request: WSGIRequest):
     if request.method == "POST":
+        print("H?hhjhhg")
         season = models.Season.objects.last()
         if season is None:
             raise Http404("No Season Found")
