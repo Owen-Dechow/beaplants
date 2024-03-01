@@ -135,3 +135,12 @@
     border-radius: 2px;
     margin-bottom: 10px;
 }
+
+.logout-btn {
+    all: unset;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    text-decoration: underline;
+}

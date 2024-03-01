@@ -29,6 +29,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
 }
 
 nav a {
@@ -37,8 +38,7 @@ nav a {
   text-decoration: none;
   gap: 10px;
   color: inherit;
-  font-size: 1.5rem;
-  width: fit-content;
+  font-size: 1.5em;
 }
 
 nav a:hover {
@@ -46,8 +46,8 @@ nav a:hover {
 }
 
 nav a img {
-  margin: 5px;
   width: 100%;
+  max-width: 70px;
 }
 
 nav a span {
@@ -55,11 +55,25 @@ nav a span {
   margin-right: 5px;
 }
 
+@media (max-width: 650px) {
+  nav {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
 
-@media (max-width: 250px) {
+  @media (max-width: 380px) {
+    nav a {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+  }
 
-  nav a {
-    font-size: 1rem;
+  @media (max-width: 250px) {
+    nav {
+      font-size: .8rem;
+    }
   }
 }
 

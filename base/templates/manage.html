@@ -9,6 +9,22 @@
 
 {% block main %}
   <details class="season">
+    <summary>Management</summary>
+    <div>
+      <ul>
+        <li>
+          <a href="/admin">Django Admin</a>
+        </li>
+        <li>
+          <form action="/logout" method="post">
+            {% csrf_token %} <button class="logout-btn" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="season">
     <summary>Orders</summary>
     <div class="orders">
       {% for order in orders %}

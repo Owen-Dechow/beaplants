@@ -25,6 +25,7 @@
         <img src="{% static 'media/BEALogo.png' %}" alt="BEA Logo" />
         <span>Bald Eagle FFA Plants</span>
       </a>
+      <span>Created by: Owen G. Dechow</span>
     </nav>
     <main>
       {% block main %}
@@ -36,17 +37,12 @@
         <ul>
           <li>
             <a href="/manage">Management</a>
-            {% if user.is_authenticated %}
-              <form action="/logout" method="post">
-                {% csrf_token %}- <button type="submit">Logout</button>
-              </form>
-            {% endif %}
           </li>
           <li>
             <a href="/product-submissions">Product Submissions</a>
           </li>
           <li>
-            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Website Creator - Owen Dechow</a>
+            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Credits</a>
           </li>
         </ul>
       </div>
