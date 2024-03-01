@@ -60,6 +60,7 @@ nav a span {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    text-align: center;
   }
 
   @media (max-width: 380px) {
