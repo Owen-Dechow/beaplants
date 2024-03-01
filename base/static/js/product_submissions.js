@@ -74,16 +74,15 @@ async function handleFormSubmit(event) {
             const img = new Image();
             img.onload = function () {
                 const elem = document.createElement('canvas');
-                const scaleFactor = 0.1; // Adjust this value to change the compression level
-                elem.width = img.width * scaleFactor;
-                elem.height = img.height * scaleFactor;
+                elem.width = img.width;
+                elem.height = img.height;
                 const ctx = elem.getContext('2d');
                 // img, dx, dy, dWidth, dHeight
-                ctx.drawImage(img, 0, 0, img.width * scaleFactor, img.height * scaleFactor);
+                ctx.drawImage(img, 0, 0, img.width, img.height);
 
                 // Calculate the quality parameter based on the original file size
                 const fileSizeInKB = imageFile.size / 1024;
-                let quality = 2400 / fileSizeInKB;
+                let quality = 256 / fileSizeInKB;
                 if (quality > 1) {
                     quality = 1
                 }
@@ -120,6 +119,74 @@ async function handleFormSubmit(event) {
                         request.open("POST", form.getAttribute('action')); // Use the form defined outside
                         request.send(formData);
                     }
+                }, 'image/jpeg', quality); // Use the calculated quality parameter
+            },
+                img.src = event.target.result;
+        }
+        reader.readAsDataURL(imageFile);
+    }
+}
+
+async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const imageField = document.querySelector('#id_images')
+    const imageFiles = imageField.files;
+    const compressedFiles = new DataTransfer();
+    const form = event.target; // Define the form here
+
+    for (const imageFile of imageFiles) {
+        const reader = new FileReader(); // Create a new FileReader for each file
+
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const elem = document.createElement('canvas');
+                elem.width = img.width;
+                elem.height = img.height;
+                const ctx = elem.getContext('2d');
+                // img, dx, dy, dWidth, dHeight
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                // Calculate the quality parameter based on the original file size
+                const fileSizeInKB = imageFile.size / 1024;
+                let quality = 256 / fileSizeInKB;
+                if (quality > 1) {
+                    quality = 1
+                }
+
+                ctx.canvas.toBlob((blob) => {
+                    const file = new File([blob], imageFile.name, {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+                    // Add the compressed file to the array
+                    compressedFiles.items.add(file);
+
+                    // If all files have been processed, submit the form
+                    if (compressedFiles.files.length === imageFiles.length) {
+                        const newImageField = document.createElement("input");
+                        newImageField.setAttribute("type", "file");
+                        newImageField.setAttribute("name", "images");
+                        newImageField.files = compressedFiles.files;
+
+                        const newFormField = document.createElement("form");
+                        Array.from(form.elements).forEach(e => {
+                            if (e.id != "id_images") {
+                                if (e.name)
+                                    newFormField.append(e);
+                            } else {
+                                newFormField.append(newImageField);
+                            }
+                        });
+
+                        newFormField.action = form.action;
+                        newFormField.method = form.method;
+                        newFormField.enctype = form.enctype;
+                        document.body.append(newFormField);
+                        newFormField.submit();
+                    }
+
                 }, 'image/jpeg', quality); // Use the calculated quality parameter
             },
                 img.src = event.target.result;
