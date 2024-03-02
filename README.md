@@ -2,7 +2,7 @@
 
 A website to sell planters made by BEASD intro to Ag. students & collect marketing data base client interactions.
 
-[LINK](beaplants-b88c96ba2582.herokuapp.com/)
+[LINK](https://beaplants-b88c96ba2582.herokuapp.com/)
 
 ## Credits
 
