@@ -85,7 +85,9 @@ async function handleFormSubmit(event) {
                 const fileSizeInKB = imageFile.size / 1024;
                 let quality = 256 / fileSizeInKB;
                 if (quality > 1) {
-                    quality = 1
+                    quality = 1;
+                } else if (quality < 0.1) {
+                    quality = 0.1;
                 }
 
                 ctx.canvas.toBlob((blob) => {
