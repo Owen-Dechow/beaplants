@@ -33,6 +33,10 @@ class Season(models.Model):
     def string_id(self):
         return str(self.id)
 
+    def days_till_sale(self):
+        time_till = self.sales_date_start - timezone.now().date()
+        return time_till.days
+
 
 class Product(models.Model):
     def __str__(self):
@@ -40,7 +44,7 @@ class Product(models.Model):
 
     group_members = models.JSONField()
     name = models.CharField(max_length=100)
-    quantity_in_stalk = models.IntegerField()
+    quantity_in_stock = models.IntegerField()
     size = models.CharField(choices=PRODUCT_SIZE_OPTIONS, max_length=20)
     logo = models.ImageField(upload_to="images/")
     production_cost = models.FloatField()
@@ -54,7 +58,7 @@ class Product(models.Model):
         return "${:,.2f}".format(self.price())
 
     def sold_out(self):
-        return self.quantity_in_stalk <= 0
+        return self.quantity_in_stock <= 0
 
     def in_season(self):
         if self.season != Season.objects.last():

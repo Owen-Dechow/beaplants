@@ -1,3 +1,13 @@
+.product-sales-date {
+    background-color: var(--red);
+    margin-inline: 10px;
+    border-radius: 2px;
+    padding: 5px;
+    text-align: center;
+    font-size: 1.5em;
+    box-shadow: var(--shadow);
+}
+
 .top-section {
     display: flex;
     justify-content: center;
