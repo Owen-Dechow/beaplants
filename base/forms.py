@@ -23,8 +23,8 @@ class OrderForm(forms.ModelForm):
             return False
         print("validating2")
 
-        if self.instance.product.quantity_in_stalk <= 0:
-            self.add_error(None, "Product is out of stalk.")
+        if self.instance.product.quantity_in_stock <= 0:
+            self.add_error(None, "Product is out of stock.")
             return False
 
         print("validating3")

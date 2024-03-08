@@ -42,7 +42,7 @@ def landing_page(request: WSGIRequest):
     season = models.Season.objects.filter().last()
     products = models.Product.objects.select_related("season").filter(season=season)
     products = list(sorted(products, key=lambda x: random()))
-    context = {"products": products}
+    context = {"products": products, "season": season}
 
     return render(request, "home.html", context)
 
@@ -108,7 +108,7 @@ def product_page(request: WSGIRequest, id: int):
             instance=models.Order(product=product, open=True, season=product.season),
         )
         if form.is_valid():
-            product.quantity_in_stalk -= 1
+            product.quantity_in_stock -= 1
             product.save()
             order = form.save()
 
