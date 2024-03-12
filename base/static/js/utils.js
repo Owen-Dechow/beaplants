@@ -54,7 +54,7 @@ function moveCarousel(dist, carouselId) {
                 return;
 
             event.preventDefault();
-            moveCarousel(rel);
+            moveCarousel(rel, carouselId);
         };
 
         if (rel === 0) item.classList.add("center");
