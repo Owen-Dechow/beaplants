@@ -9,9 +9,9 @@
 
 {% block main %}
   {% if season.days_till_sale > 1 %}
-    <div class="product-sales-date">Sorry but product sales do not start for {{ season.days_till_sale }} days</div>
+    <div class="product-sales-date">Sorry, but product sales do not start for {{ season.days_till_sale }} days!</div>
   {% elif season.days_till_sale == 1 %}
-    <div class="product-sales-date">Sorry but product sales do not start until tomarrow</div>
+    <div class="product-sales-date">Sorry, but product sales do not start until tomarrow!</div>
   {% endif %}
 
   <div class="top-section">
