@@ -191,4 +191,10 @@ LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+HOMEPAGE_INFO = env(
+    "HOMEPAGE_INFO",
+    str,
+    "Funded by the Bald Eagle FFA, BEA Intro To Agriculture students work to create a quality product in order to gain a better understanding of product design, production, sales, marketing, and other imperative business skills. BEAPlants is the compilation, and place of sale of all the students' hard work. Thank you for your support of The Bald Eagle FFA, and The Bald Eagle Agriculture Education Program.",
+)
+
 django_heroku.settings(locals(), staticfiles=False)
