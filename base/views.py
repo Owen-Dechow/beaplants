@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.conf.global_settings import EMAIL_HOST_USER
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from random import random
 from . import keys
 from . import xlsx
@@ -42,7 +43,11 @@ def landing_page(request: WSGIRequest):
     season = models.Season.objects.filter().last()
     products = models.Product.objects.select_related("season").filter(season=season)
     products = list(sorted(products, key=lambda x: random()))
-    context = {"products": products, "season": season}
+    context = {
+        "products": products,
+        "season": season,
+        "hero_info": settings.HOMEPAGE_INFO,
+    }
 
     return render(request, "home.html", context)
 
