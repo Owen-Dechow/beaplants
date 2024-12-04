@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import environ
-import django_heroku
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -73,6 +72,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "base.context_processors.site_style"
             ],
         },
     },
@@ -138,6 +138,9 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+
+WEBSITE_STYLE = "new" #legacy, new, mute, valentine
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -197,4 +200,3 @@ HOMEPAGE_INFO = env(
     "Funded by the Bald Eagle FFA, BEA Intro To Agriculture students work to create a quality product in order to gain a better understanding of product design, production, sales, marketing, and other imperative business skills. BEAPlants is the compilation, and place of sale of all the students' hard work. Thank you for your support of The Bald Eagle FFA, and The Bald Eagle Agriculture Education Program.",
 )
 
-django_heroku.settings(locals(), staticfiles=False)

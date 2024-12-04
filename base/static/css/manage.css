@@ -4,6 +4,7 @@
 
 .season>summary {
     background-color: var(--gold);
+    color: var(--gold-text);
     padding: 10px;
     box-shadow: var(--shadow);
     border-radius: 2px;
@@ -53,7 +54,7 @@
 .edit-form button,
 .edit-form textarea {
     background-color: var(--blue2);
-    color: var(--text);
+    color: var(--blue-text);
     border: 1px solid;
     border-radius: 2px;
     padding: 5px;
@@ -121,7 +122,7 @@
 
 .orders button {
     background-color: var(--gold);
-    color: inherit;
+    color: var(--gold-text);
     border: 1px solid;
     border-radius: 2px;
     padding: 5px;

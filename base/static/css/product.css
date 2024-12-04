@@ -34,6 +34,7 @@
     width: 100%;
     text-align: center;
     font-weight: bold;
+    z-index: 1;
 }
 
 @media (max-width: 850px) {
@@ -53,6 +54,52 @@
     }
 }
 
+.variation-tabs {
+    box-shadow: var(--shadow);
+    background-color: var(--blue1);
+    margin-top: 20px;
+    margin-inline: auto;
+    border-radius: 2px;
+    overflow: clip;
+    max-width: 1300px;
+    width: calc(100% - 20px);
+    position: relative;
+    border-bottom: 5px solid var(--gold);
+    margin-bottom: 20px;
+}
+
+.variation {
+    display: none;
+    padding: 20px
+}
+
+.variation.selected {
+    display: block;
+}
+
+.variation-tab-btn {
+    all: unset;
+    display: inline-block;
+    background-color: var(--blue1);
+    padding: 10px;
+    padding-bottom: 5px;
+    border-bottom: 5px solid var(--blue1);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.variation-tab-select {
+    padding: 5px;
+    background-color: var(--blue2);
+}
+
+.variation-tab-btn:hover {
+    border-color: unset;
+}
+
+.variation-tab-btn.selected {
+    border-color: var(--gold);
+}
 
 .carousel {
     margin-inline: auto;
@@ -66,29 +113,25 @@
 .error-warning {
     position: fixed;
 
-    background-color: var(--blue1);
+    background-color: var(--blue2);
     border-bottom: 5px solid var(--gold);
     box-shadow: var(--shadow);
     border-radius: 2px;
     padding: 20px;
 
-    top: 10px;
-    left: 10px;
-    width: calc(100% - 20px);
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
     z-index: 2;
-    box-sizing: border-box;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 }
 
 .error-warning button {
     background-color: var(--gold);
+    color: var(--gold-text);
     border-radius: 2px;
     border: 1px solid;
-    color: var(--text);
     cursor: pointer;
     font-size: 1rem;
     box-shadow: var(--shadow);
@@ -96,6 +139,7 @@
 
 .product-order-form {
     background-color: var(--gold);
+    color: var(--gold-text);
     box-shadow: var(--shadow);
     border-radius: 2px;
     margin: 10px;
@@ -104,6 +148,7 @@
     gap: 5px;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .product-order-form-fields .field {
@@ -122,10 +167,12 @@
 }
 
 .field input,
-.field button {
+.field button,
+.field textarea {
+    resize: vertical;
     padding: 5px;
     background-color: var(--blue1);
-    color: var(--text);
+    color: var(--blue-text);
     border: 1px solid;
     border-radius: 2px;
 }
@@ -180,10 +227,10 @@
 .toggle {
     --width: 50px;
     --height: 25.5px;
-    --slider: var(--text);
+    --slider: var(--blue-text);
     --enabled: var(--blue1);
 
-    background-color: color-mix(in srgb, black, var(--blue1));
+    background-color: color-mix(in hsl, black, var(--blue1));
     border: 1px solid;
     border-radius: 2px;
     position: relative;

@@ -1,20 +1,22 @@
+import email
 from io import BytesIO
-from django.forms import ValidationError
-from django.shortcuts import get_object_or_404, render
+from math import prod
+from operator import mod
+from random import random
+
+from django.conf import settings
+from django.conf.global_settings import EMAIL_HOST_USER
+from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import send_mail
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.template.loader import render_to_string
-from django.conf.global_settings import EMAIL_HOST_USER
 from django.db import transaction
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from random import random
-from . import keys
-from . import xlsx
+from django.db.models.fields import return_None
+from django.forms import ValidationError
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 
-from . import models
-from . import forms
+from . import forms, models, xlsx
 
 
 ########## UTILS ##########
@@ -33,16 +35,16 @@ def str_val_2_404(
         raise Http404(f"{ERR(string)} not in options: {options}")
 
     if char_options:
-        for l in string:
-            if l not in char_options:
-                raise f"{ERR(string)} character '{l}' not found in char_options: {char_options}"
+        for letter in string:
+            if letter not in char_options:
+                raise f"{ERR(string)} character '{letter}' not found in char_options: {char_options}"
 
 
 ########## VIEWS ##########
 def landing_page(request: WSGIRequest):
     season = models.Season.objects.filter().last()
     products = models.Product.objects.select_related("season").filter(season=season)
-    products = list(sorted(products, key=lambda x: random()))
+    products = list(sorted(products, key=lambda _: random()))
     context = {
         "products": products,
         "season": season,
@@ -57,14 +59,10 @@ def landing_page(request: WSGIRequest):
 def manage_page(request: WSGIRequest):
     if request.method == "POST":
         if "season_id" not in request.POST:
-            raise Http404("Season Un Identifiable")
+            raise Http404("Season Not Identifiable")
 
         if request.POST["season_id"] == "-1":
-            instance = models.Season(
-                add_key=keys.create_secret_key(
-                    models.Season._meta.get_field("add_key").max_length
-                )
-            )
+            instance = models.Season(add_key=models.Season.generate_key())
         else:
             instance = get_object_or_404(models.Season, id=request.POST["season_id"])
 
@@ -84,66 +82,59 @@ def manage_page(request: WSGIRequest):
 @transaction.atomic
 def product_submissions_page(request: WSGIRequest):
     if request.method == "POST":
-        print("H?hhjhhg")
-        season = models.Season.objects.last()
-        if season is None:
-            raise Http404("No Season Found")
-
-        form = forms.ProductForm(
-            request.POST, request.FILES, instance=models.Product(season=season)
-        )
-
-        if form.is_valid():
-            form.save()
+        form_family = forms.ProductFormFamily(request.POST, request.FILES, "v")
+        if form_family.is_valid():
+            form_family.save()
             return HttpResponseRedirect("/")
+        else:
+            var_forms = form_family.variation_forms
+            form = form_family.product_form
     else:
-        form = forms.ProductForm
+        form = forms.ProductForm(instance=models.Product())
+        var_forms = None
 
-    context = {"form": form}
+    context = {
+        "form": form,
+        "var_form_template": forms.ProductVariationForm(prefix="v%"),
+        "var_forms": var_forms,
+    }
     return render(request, "product_submissions.html", context)
 
 
 @transaction.atomic
 def product_page(request: WSGIRequest, id: int):
     product = get_object_or_404(models.Product.objects.select_related("season"), id=id)
+    variations = {}
+    for variation in models.ProductVariation.objects.filter(product=product):
+        variations[variation] = models.ProductImage.objects.filter(variation=variation)
 
     if request.method == "POST":
         form = forms.OrderForm(
-            request.POST,
-            instance=models.Order(product=product, open=True, season=product.season),
+            request.POST, instance=models.Order(open=True, season=product.season)
         )
+
         if form.is_valid():
-            product.quantity_in_stock -= 1
-            product.save()
+            form.cleaned_data["product"].quantity_in_stock -= 1
+            form.cleaned_data["product"].save()
             order = form.save()
 
-            try:
-                send_mail(
-                    subject="Thank you for your order!",
-                    message=render_to_string(
-                        "order_confirm_email.txt",
-                        {
-                            "order": order,
-                            "url": request.get_host(),
-                            "product": product,
-                            "contacts": product.season.contacts.split("\n"),
-                        },
-                        request,
-                    ),
-                    from_email=EMAIL_HOST_USER,
-                    recipient_list=[form.cleaned_data["email"]],
-                    fail_silently=False,
-                )
+            send_mail(
+                subject="We received your BEAPlants order!",
+                message=render_to_string(
+                    "order_confirm_email.txt",
+                    {"order": order, "url": request.get_host(), "contact_info": product.season.contacts},
+                ),
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[order.email, EMAIL_HOST_USER],
+                fail_silently=False,
+            )
 
-                return HttpResponseRedirect("/order-sent")
-            except:
-                form.add_error("email", ValidationError("Failed email send."))
-                order.delete()
+            return HttpResponseRedirect("/order-sent")
+
     else:
-        form = forms.OrderForm()
+        form = forms.OrderForm
 
-    images = models.ProductImage.objects.filter(product=product)
-    context = {"product": product, "images": images, "form": form}
+    context = {"product": product, "variations": variations, "form": form}
     return render(request, "product.html", context)
 
 
@@ -213,7 +204,7 @@ def pull_data(request: WSGIRequest, seasonID):
     product_views = models.ProductView.objects.select_related("product").filter(
         season=season
     )
-    products = models.Product.objects.filter(season=season)
+    products = models.ProductVariation.objects.filter(season=season)
     orders = models.Order.objects.select_related("product").filter(season=season)
 
     with BytesIO() as output:
@@ -256,7 +247,7 @@ def pull_data(request: WSGIRequest, seasonID):
 
         response = HttpResponse(output.read())
         response["Content-Type"] = "application/vnd.ms-excel"
-        response["Content-Disposition"] = f"attachment; filename=BEAPlantsData.xlsx"
+        response["Content-Disposition"] = "attachment; filename=BEAPlantsData.xlsx"
 
         output.close()
         return response

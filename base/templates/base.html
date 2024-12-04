@@ -2,61 +2,117 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      {% block title %}
+        {% block title %}
         BEA Plants
-      {% endblock %}
+        {% endblock %}
     </title>
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <script src="{% static 'js/utils.js' %}"></script>
 
+    {% if site_style == "legacy" %}
+    <style>
+        :root {
+            --gold: #876a21;
+            --blue1: #003860;
+            --blue2: #002742;
+            --blue-text: #d1d1d1;
+            --gold-text: #d1d1d1;
+        }
+
+    </style>
+    {% elif site_style == "new" %}
+    <style>
+        :root {
+            --gold: #C0BB87;
+            --blue1: #13294B;
+            --blue2: color-mix(in hsl, black 25%, var(--blue1));
+            --blue-text: #eee;
+            --gold-text: #1a1a1a;
+        }
+
+    </style>
+    {% elif site_style == "mute" %}
+    <style>
+        :root {
+            --gold: #ac9a68;
+            --blue1: #344598;
+            --blue2: #1d2653;
+            --blue-text: darkgrey;
+            --gold-text: #333;
+        }
+
+    </style>
+    {% elif site_style == "valentine" %}
+    <style>
+        :root {
+            --gold: #993366;
+            --blue1: #660033;
+            --blue2: #4d0028;
+            --blue-text: lightgrey;
+            --gold-text: lightgrey;
+        }
+
+    </style>
+    {% endif %}
     {% block head %}
 
     {% endblock %}
-  </head>
+</head>
 
-  <body>
+<body>
     <nav>
-      <a href="/">
-        <img src="{% static 'media/BEALogo.png' %}" alt="BEA Logo" />
-        <span>Bald Eagle FFA Plants</span>
-      </a>
-      <span>Created by: Owen G. Dechow</span>
+        <a href="/">
+            {% if site_style == "legacy" %}
+            <img src="{% static 'media/BEALogo.png' %}" alt="BEA Logo" />
+            {% elif site_style == "new" %}
+            <img src="{% static 'media/BEALogo2.png' %}" alt="BEA Logo" />
+            {% elif site_style == "mute" %}
+            <img src="{% static 'media/BEALogo2.png' %}" alt="BEA Logo" />
+            {% elif site_style == "valentine" %}
+            <img src="{% static 'media/BEALogo.png' %}" alt="BEA Logo" />
+            {% endif %}
+            <span>Bald Eagle FFA Plants</span>
+        </a>
+        <span>Created by: Owen G. Dechow</span>
     </nav>
     <main>
-      {% block main %}
+        {% block main %}
 
-      {% endblock %}
+        {% endblock %}
     </main>
     <footer>
-      <div>
-        <ul>
-          <li>
-            <a href="/manage">Management</a>
-          </li>
-          <li>
-            <a href="/product-submissions">Product Submissions</a>
-          </li>
-          <li>
-            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Credits</a>
-          </li>
-        </ul>
-      </div>
-      <span>i</span>
+        <div>
+            <ul>
+                <li>
+                    <a href="/manage">Management</a>
+                </li>
+                <li>
+                    <a href="/product-submissions">Product Submissions</a>
+                </li>
+                <li>
+                    <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits"
+                        target="_blank">Credits</a>
+                </li>
+            </ul>
+        </div>
+        <span>i</span>
     </footer>
     <div class="cookies" id="cookies">
-      <h1>This site uses cookies!</h1>
-      <span>By using this website you are accepting all cookies used for authentication and maketing analysis. No third party cookies are sanctioned by BEA Plants and no information will be shared with third parties. Thank you!</span>
-      <button type="button" onclick="confirmCookies(event)">OK</button>
+        <h1>This site uses cookies!</h1>
+        <span>By using this site you are accepting cookies.</span>
+        <button type="button" onclick="confirmCookies(event)">OK</button>
     </div>
     <script>
-      if (getCookie('cookieOK') == 'true') {
-        document.querySelector('#cookies').remove()
-      }
+        if (getCookie('cookieOK') == 'true') {
+            document.querySelector('#cookies').remove()
+        }
     </script>
-  </body>
+</body>
+
 </html>

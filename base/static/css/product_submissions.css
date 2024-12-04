@@ -4,7 +4,7 @@
     margin: 10px;
 }
 
-.group-members {
+.card-space {
     display: grid;
     border: 1px solid;
     background-color: var(--blue2);
@@ -22,19 +22,21 @@
     padding: 10px;
     gap: 3px;
     display: grid;
-    grid-template-columns: auto auto;
     background-color: var(--blue1);
     box-shadow: var(--shadow);
     border-radius: 2px;
     border-bottom: 5px solid var(--gold);
+    gap: 5px;
 }
 
-.card label {
-    width: 90px;
+.card>div {
+    display: grid;
+    grid-template-columns: 43% 57%;
 }
 
-.card button {
-    grid-column: 2;
+.card>div ul {
+    grid-row: 2;
+    grid-column: span 2;
 }
 
 

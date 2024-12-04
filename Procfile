@@ -1,1 +1,0 @@
-web: gunicorn beaplants.wsgi:application --log-file -
