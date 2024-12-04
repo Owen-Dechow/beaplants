@@ -121,13 +121,14 @@
 
 .filters {
     background-color: var(--gold);
+    color: var(--gold-text);
     padding: 10px;
-    color: var(--text);
     border-radius: 2px;
     margin: 10px;
     box-shadow: var(--shadow);
     display: flex;
     align-items: center;
+    stroke: var(--gold-text);
 }
 
 .filters label {
@@ -139,7 +140,7 @@
 .filters button {
     padding: 5px;
     background-color: var(--blue1);
-    color: var(--text);
+    color: var(--blue-text);
     border: 1px solid;
     border-radius: 2px;
     margin-right: 20px;
@@ -147,7 +148,7 @@
 
 .filters svg circle,
 .filters svg rect {
-    stroke: var(--text);
+    stroke: var(--blue-text);
 }
 
 .filters button:first-of-type {

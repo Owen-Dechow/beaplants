@@ -18,7 +18,7 @@ form button,
 form textarea,
 form select {
     background-color: var(--blue2);
-    color: var(--text);
+    color: var(--blue-text);
     border: 1px solid;
     border-radius: 2px;
     padding: 5px;

@@ -2,103 +2,108 @@
 {% load static %}
 
 {% block head %}
-  <link href="{% static 'css/home.css' %}" rel="stylesheet" />
-  <link href="{% static 'css/carousel.css' %}" rel="stylesheet" />
-  <script src="{% static 'js/home.js' %}"></script>
+<link href="{% static 'css/home.css' %}" rel="stylesheet" />
+<link href="{% static 'css/carousel.css' %}" rel="stylesheet" />
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-  {% if season.days_till_sale > 1 %}
-    <div class="product-sales-date">Sorry, but product sales do not start for {{ season.days_till_sale }} days!</div>
-  {% elif season.days_till_sale == 1 %}
-    <div class="product-sales-date">Sorry, but product sales do not start until tomarrow!</div>
-  {% endif %}
+{% if season.days_till_sale > 1 %}
+<div class="product-sales-date">Sorry, but product sales do not start for {{ season.days_till_sale }} days!</div>
+{% elif season.days_till_sale == 1 %}
+<div class="product-sales-date">Sorry, but product sales do not start until tomarrow!</div>
+{% endif %}
 
-  <div class="top-section">
+<div class="top-section">
     <div class="info">
-      <div class="row1">
-        <img src="{% static 'media/FFALogo.svg' %}" alt="FFALogo" />
-        <h1>Made By Bald Eagle FFA Students</h1>
-      </div>
+        <div class="row1">
+            <img src="{% static 'media/FFALogo.svg' %}" alt="FFALogo" />
+            <h1>Made By Bald Eagle FFA Students</h1>
+        </div>
 
-      <div class="row2">
-        <p>{{ hero_info }}</p>
-      </div>
+        <div class="row2">
+            <p>{{ hero_info }}</p>
+        </div>
     </div>
 
     <div id="product-carousel" class="carousel" index="2">
-      <div class="carousel-items">
-        {% for product in products|slice:':5' %}
-          <a class="carousel-item" href="/p/{{ product.id }}">
-            {% if product.sold_out %}
-              <span class="sold-out-warning">Sold Out</span>
-            {% endif %}
-            <img src="{{ product.logo.url }}" />
-            <span class="product-info">{{ product.name }}: {{ product.formatted_price }}</span>
-            <span class="product-info">
-              Framers:{% for first, last in product.group_members.items %}
-                {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
-              {% endfor %}
-            </span>
-          </a>
-        {% endfor %}
-      </div>
-      <div class="carousel-controls">
-        <button type="button" onclick="moveCarousel(-1, 'product-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
-        <button type="button" onclick="moveCarousel(1, 'product-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
-      </div>
-      <script>
-        moveCarousel(0, 'product-carousel')
-      </script>
+        <div class="carousel-items">
+            {% for product in products|slice:':5' %}
+            <a class="carousel-item" href="/p/{{ product.id }}">
+                {% if product.sold_out %}
+                <span class="sold-out-warning">Sold Out</span>
+                {% endif %}
+                <img src="{{ product.logo.url }}" />
+                <span class="product-info">{{ product.name }}: {{ product.formatted_price }}</span>
+                <span class="product-info">
+                    Framers:{% for first, last in product.group_members.items %}
+                    {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="carousel-controls">
+            <button type="button"
+                onclick="moveCarousel(-1, 'product-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
+            <button type="button"
+                onclick="moveCarousel(1, 'product-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
+        </div>
+        <script>
+            moveCarousel(0, 'product-carousel')
+        </script>
     </div>
-  </div>
+</div>
 
-  <div class="filters">
+<form class="filters" onsubmit="applySorting(event); return false;">
     {% csrf_token %}
     <label for="sort">Sort By:</label>
     <select name="sort" id="sort">
-      <option selected value="random">Default</option>
-      <option value="price-low-to-high">Price (Low to High)</option>
-      <option value="price-high-to-low">Price (High to Low)</option>
+        <option selected value="random">Default</option>
+        <option value="price-low-to-high">Price (Low to High)</option>
+        <option value="price-high-to-low">Price (High to Low)</option>
     </select>
 
     <label for="filter-size">Filter Size:</label>
     <select name="filter-size" id="filter-size">
-      <option selected value="none">None</option>
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
+        <option selected value="none">None</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
     </select>
 
     <label for="search">
-      <svg width="20" height="20" viewBox="0 0 5.2916666 5.2916666">
-        <g id="g2318" transform="translate(-0.2567192,0.30881838)">
-          <circle style="fill-opacity:0;stroke-width:0.5;" cx="3.401638" cy="1.8900287" r="1.7577372" />
-          <rect style="fill-opacity:0;stroke-width:0.5;" width="1.9077878" height="0.021435818" x="-2.6666815" y="3.6573761" transform="rotate(-45)" />
-        </g>
-      </svg>
+        <svg width="20" height="20" viewBox="0 0 5.2916666 5.2916666">
+            <g id="g2318" transform="translate(-0.2567192,0.30881838)">
+                <circle style="fill-opacity:0;stroke-width:0.5;stroke:inherit;" cx="3.401638" cy="1.8900287" r="1.7577372" />
+                <rect style="fill-opacity:0;stroke-width:0.5;stroke:inherit;" width="1.9077878" height="0.021435818" x="-2.6666815"
+                    y="3.6573761" transform="rotate(-45)" />
+            </g>
+        </svg>
     </label>
     <input type="text" id="search" />
 
-    <button type="button" onclick="applySorting(event)">APPLY <span>&#10095;&#10095;</span></button>
+    <button type="submit">APPLY <span>&#10095;&#10095;</span></button>
     <button type="button" onclick="clearSorting(event)">CLEAR <span>&#10095;&#10095;</span></button>
-  </div>
+</form>
 
-  <div class="product-grid">
+<div class="product-grid">
     {% for product in products %}
-      <a class="grid-item" href="/p/{{ product.id }}" searchdata="{{ product.group_members }} {{ product.id }} {{ product.name }}" size="{{ product.size }}" price="{{ product.price }}">
+    <a class="grid-item" href="/p/{{ product.id }}"
+        searchdata="{{ product.group_members }} {{ product.id }} {{ product.name }}" size="{{ product.size }}"
+        price="{{ product.price }}">
         {% if product.sold_out %}
-          <span class="sold-out-warning">Sold Out</span>
+        <span class="sold-out-warning">Sold Out</span>
         {% endif %}
         <img src="{{ product.logo.url }}" />
         <span class="product-info">{{ product.name }}</span>
         <span class="product-info">{{ product.formatted_price }}</span>
         <span class="product-info">
-          Framers:{% for first, last in product.group_members.items %}
+            Framers:{% for first, last in product.group_members.items %}
             {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
-          {% endfor %}
+            {% endfor %}
         </span>
-      </a>
+    </a>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}

@@ -3,112 +3,140 @@
 {% load static %}
 
 {% block title %}
-  {{ product.name }}
+{{ product.name }}
 {% endblock %}
 
 {% block head %}
-  <script src="{% static 'js/product.js' %}"></script>
-  <script src="{% static 'js/utils.js' %}"></script>
-  <link href="{% static 'css/product.css' %}" rel="stylesheet" />
-  <link href="{% static 'css/carousel.css' %}" rel="stylesheet" />
+<script src="{% static 'js/product.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<link href="{% static 'css/product.css' %}" rel="stylesheet" />
+<link href="{% static 'css/carousel.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block main %}
-  <script>
+<script>
     productId = '{{ product.id }}'
     sendProductViewReport()
-  </script>
+</script>
 
-  <div class="top-section">
+<div class="top-section">
     {% if product.sold_out %}
-      <div class="sold-out-warning">Sold Out</div>
+    <div class="sold-out-warning">Sold Out</div>
     {% endif %}
 
     <img src="{{ product.logo.url }}" alt="Product Image" />
 
     <div class="float-right">
-      <h1>{{ product.name }}</h1>
-      <p>{{ product.description }}</p>
-      <p>
-        Framers:{% for first, last in product.group_members.items %}
-          {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+        <p>
+            Framers:{% for first, last in product.group_members.items %}
+            {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </p>
+        <p>Price: {{ product.formatted_price }}</p>
+        <p>Quantity Remaining: {{ product.quantity_in_stock }}</p>
+    </div>
+</div>
+
+<div class="variation-tabs">
+    <div class="variation-tab-select">
+        {% for variation in variations %}
+        <button class="variation-tab-btn" type="button" onclick="selectVariation(event)" variation="{{variation.id}}"
+            in-stock="{{variation.quantity_in_stock}}">
+            {{variation.variant_label}}
+        </button>
         {% endfor %}
-      </p>
-      <p>Price: {{ product.formatted_price }}</p>
-      <p>Quantity Remaining: {{ product.quantity_in_stock }}</p>
     </div>
-  </div>
 
-  <div class="carousel" id="image-carousel" index="2">
-    <div class="carousel-items">
-      {% for img in images %}
-        <img class="carousel-item" src="{{ img.image.url }}" alt="Product Image" />
-      {% endfor %}
-    </div>
-    <div class="carousel-controls">
-      <button type="button" onclick="moveCarousel(-1, 'image-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
-      <button type="button" onclick="moveCarousel(1, 'image-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
-    </div>
-    <script>
-      moveCarousel(0, 'image-carousel')
-    </script>
-  </div>
-  {% if product.can_be_sold %}
-    <form method="POST" class="product-order-form">
-      {% if form.errors %}
-        <div class="error-warning">
-          <h1>Oops! Somthing Went Wrong! :(</h1>
-          <p>Check order form for more details.</p>
-          <button onclick="clearParent(event)">x</button>
+    {% for variation, images in variations.items %}
+
+    <div class="variation" variation="{{variation.id}}">
+        <p>Size: {{variation.size}}</p>
+        <p>Variation Id: {{variation.variant_label}}</p>
+        <p>Quantity Remaining: {{variation.quantity_in_stock}}</p>
+
+        <div class="carousel" id="image-carousel-{{ variation.id }}" index="2">
+            <div class="carousel-items">
+                {% for img in images %}
+                <img class="carousel-item" src="{{ img.image.url }}" alt="Product Image" />
+                {% endfor %}
+            </div>
+            <div class="carousel-controls">
+                <button type="button"
+                    onclick="moveCarousel(-1, 'image-carousel-{{ variation.id }}')">&#10094;<span>&#10094;&#10094;</span></button>
+                <button type="button"
+                    onclick="moveCarousel(1, 'image-carousel-{{ variation.id }}')">&#10095;<span>&#10095;&#10095;</span></button>
+            </div>
+            <script>
+                moveCarousel(0, 'image-carousel-{{ variation.id }}')
+            </script>
         </div>
-      {% endif %}
 
-      <h1>Order Now</h1>
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+        {% if variation.sold_out %}
+        <div class="sold-out-warning">Sold Out</div>
+        {% endif %}
+    </div>
 
-      <div class="product-order-form-fields">
-        {{ form.name.errors }}
-        <div class="field">{{ form.name.label_tag }}
-          {{ form.name }}</div>
+    {% endfor %}
 
-        {{ form.email.errors }}
-        <div class="field">{{ form.email.label_tag }}
-          {{ form.email }}</div>
+    {% if form.errors %}
+    <div class="error-warning">
+        <h1>Oops! Somthing Went Wrong! :(</h1>
+        <p>Check order form for more details.</p>
+        <button onclick="clearParent(event)">close</button>
+    </div>
+    {% endif %}
 
-        {{ form.phone_number.errors }}
-        <div class="field">{{ form.phone_number.label_tag }}
-          {{ form.phone_number }}</div>
+    {% if product.can_be_sold %}
+    <form method="POST" id="order-form" class="product-order-form">
+        <h1>Order Now</h1>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-        {{ form.student_deliverer.errors }}
-        <div class="field">{{ form.student_deliverer.label_tag }}
-          {{ form.student_deliverer }}</div>
+        <div class="product-order-form-fields">
+            {% for field in form %}
+            {% if field.name != "donation" %}
+            {{ field.errors }}
+            <div class="field">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+            {% endif %}
+            {% endfor %}
 
-        {{ form.donation.errors }}
+            {{ form.donation.errors }}
+            <div class="field">
+                {{ form.donation.label_tag }}
+                <span class="donation-set off">
+                    <label for="toggle-input" class="toggle">
+                        <input onchange="toggleDonation(event)" id="toggle-input" type="checkbox" />
+                        <span class="slider"></span>
+                    </label>
+                    $
+                    {{ form.donation }}
+                </span>
+            </div>
+
+        </div>
+
         <div class="field">
-          {{ form.donation.label_tag }}
-          <span class="donation-set off">
-            <label for="toggle-input" class="toggle">
-              <input onchange="toggleDonation(event)" id="toggle-input" type="checkbox" />
-              <span class="slider"></span>
-            </label>
-            $
-            {{ form.donation }}
-          </span>
+            <button>SEND ORDER <span>&#10095;&#10095;</span></button>
         </div>
 
-        {{ form.user_id }}
-      </div>
-
-      <div class="field">
-        <button>SEND ORDER <span>&#10095;&#10095;</span></button>
-      </div>
-
-      <script>
-        document.getElementById('donation-input').disabled = true
-        document.getElementById('toggle-input').checked = false
-        document.getElementById('uid-input').value = getuid()
-      </script>
+        <script>
+            document.getElementById('donation-input').disabled = true
+            document.getElementById('toggle-input').checked = false
+            document.getElementById('uid-input').value = getuid()
+        </script>
     </form>
-  {% endif %}
+
+    {% endif %}
+</div>
+
+
+<script>
+    document.querySelector(".variation-tab-btn").click()
+</script>
+
 {% endblock %}

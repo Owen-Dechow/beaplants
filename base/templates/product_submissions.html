@@ -1,69 +1,92 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block head %}
-  <link href="{% static 'css/product_submissions.css' %}" rel="stylesheet" />
-  <link href="{% static 'css/form.css' %}" rel="stylesheet" />
-  <script src="{% static 'js/product_submissions.js' %}"></script>
-{% endblock %}
+<link href="{% static 'css/product_submissions.css' %}" rel="stylesheet" />
+<link href="{% static 'css/form.css' %}" rel="stylesheet" />
+<script src="{% static 'js/product_submissions.js' %}"></script>
+{% endblock head %}
 
 {% block main %}
-  <form method="post" action="/product-submissions" enctype="multipart/form-data" class="add-product" onsubmit="handleFormSubmit(event)">
+<form method="post" action="/product-submissions" enctype="multipart/form-data" class="add-product">
     {% csrf_token %}
-    <div>{{ form.name.label_tag }}
-      {{ form.name.errors }}
-      {{ form.name }}</div>
 
-    <div>{{ form.quantity_in_stock.label_tag }}
-      {{ form.quantity_in_stock.errors }}
-      {{ form.quantity_in_stock }}</div>
 
-    <div>{{ form.size.label_tag }}
-      {{ form.size.errors }}
-      {{ form.size }}</div>
+    {% for field in form %}
+    <div>
+        {% if field.name != 'group_members' %}
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+        {% endif %}
+    </div>
+    {% endfor %}
 
-    <div>{{ form.logo.label_tag }}
-      {{ form.logo.errors }}
-      {{ form.logo }}</div>
+    <template id="member-template">
+        <div class="card">
+            <div>
+                <label for="first-%">First Name:</label>
+                <input id="first-%" class="first" type="text" onchange="justifyCards(event)" required />
+            </div>
 
-    <div>{{ form.images.label_tag }}
-      {{ form.images.errors }}
-      {{ form.images }}</div>
-
-    <div>{{ form.production_cost.label_tag }}
-      {{ form.production_cost.errors }}
-      {{ form.production_cost }}</div>
-
-    <div>{{ form.description.label_tag }}
-      {{ form.description.errors }}
-      {{ form.description }}</div>
-
-    <div>{{ form.add_key.label_tag }}
-      {{ form.add_key.errors }}
-      {{ form.add_key }}</div>
+            <div>
+                <label for="last-%">Last Name:</label>
+                <input id="last-%" class="last" type="text" onchange="justifyCards(event)" required />
+            </div>
+            <button type="button" onclick="removeMember(event)">remove</button>
+        </div>
+    </template>
 
     <div>
-      {{ form.group_members.label_tag }}
-      {{ form.group_members.errors }}
-      <div class="group-members" id="group-members">
-        {{ form.group_members }}
-        <template id="member-template">
-          <div class="card">
-            <label for="first">First Name:</label><input id="first" class="first" type="text" onchange="justifyCards(event)" required />
-            <label for="last">Last Name:</label><input id="last" class="last" type="text" onchange="justifyCards(event)" required />
-            <button type="button" onclick="removeMember(event)">remove</button>
-          </div>
-        </template>
+        {{ form.group_members.label_tag }}
+        {{ form.group_members.errors }}
 
-        <div class="cards">
-          <button type="button" onclick="addMember()">add</button>
+        <div class="group-members card-space" id="group-members">
+            {{ form.group_members }}
+
+
+            <div class="cards">
+                <button type="button" onclick="addMember()">add</button>
+            </div>
         </div>
-      </div>
-      <script>
-        if (document.querySelector("input[name='group_members']").value == 'null') addMember()
-        else updateCardsToJSON()
-      </script>
+
     </div>
+
+    <template id="variation-template">
+        <div class="card">
+            {{ var_form_template }}
+            <button type="button" onclick="removeVariant(event)">remove</button>
+        </div>
+    </template>
+
+    <div>
+        Product Variations:
+        <div class="variations card-space" id="variations">
+            <div class="cards">
+                {% for var_form in var_forms %}
+                <div class="card">
+                    {{ var_form }}
+                    <button type="button" onclick="removeVariant(event)">remove</button>
+                </div>
+                {% endfor %}
+                <button type="button" onclick="addVariation()">add</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (Q("input[name='group_members']").value == 'null')
+            addMember()
+        else
+            updateCardsToJSON()
+    </script>
+
+    {% if not var_forms %}
+    <script>
+        addVariation()
+    </script>
+    {% endif %}
+
     <button type="submit">Submit</button>
-  </form>
+</form>
 {% endblock %}
