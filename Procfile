@@ -1,0 +1,1 @@
+web: beaplants herdgen.wsgi --log-file -

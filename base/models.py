@@ -31,7 +31,17 @@ class Season(models.Model):
     contacts = models.TextField()
 
     def get_markup(self):
-        return self.markup["0"]
+        days_past_start = timezone.now().date() - self.sales_date_start
+        current_section = 0
+
+        for key in self.markup:
+            key = int(key)
+            if days_past_start.days >= key:
+                current_section = max(current_section, key)
+
+        print(current_section)
+
+        return self.markup[str(current_section)]
 
     def valid_markup_json(self):
         return str(self.markup).replace("'", '"')
