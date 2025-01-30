@@ -1,1 +1,1 @@
-web: beaplants herdgen.wsgi --log-file -
+web: gunicorn beaplants.wsgi --log-file -
