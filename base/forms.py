@@ -20,7 +20,10 @@ class OrderForm(forms.ModelForm):
     product = forms.IntegerField(
         widget=forms.HiddenInput(attrs={"id": "product-input"}), label=""
     )
-    delivery_instructions = forms.CharField(widget=forms.Textarea)
+    delivery_instructions = forms.CharField(
+        label="Pickup Specifactions",
+        widget=forms.Textarea(attrs={"placeholder": "John Doe will pick this up..."}),
+    )
 
     def clean_product(self):
         product_id = self.cleaned_data["product"]

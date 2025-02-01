@@ -148,7 +148,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "base" / "static",
 ]
 
-if env("LOCAL_STATIC", bool, True):
+if env("LOCAL_STATIC", bool):
     STATIC_URL = "static/"
     STATIC_ROOT = BASE_DIR / "staticfiles/"
     MEDIA_ROOT = BASE_DIR / "media/"

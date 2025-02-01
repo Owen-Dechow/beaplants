@@ -15,7 +15,7 @@
 
 {% block main %}
 <script>
-    productId = '{{ product.id }}'
+    productId = '{{ product.id }}';
     sendProductViewReport()
 </script>
 
@@ -42,8 +42,7 @@
 <div class="variation-tabs">
     <div class="variation-tab-select">
         {% for variation in variations %}
-        <button class="variation-tab-btn" type="button" onclick="selectVariation(event)" variation="{{variation.id}}"
-            in-stock="{{variation.quantity_in_stock}}">
+        <button class="variation-tab-btn" type="button" onclick="selectVariation(event)" variation="{{variation.id}}" in-stock="{{variation.quantity_in_stock}}">
             {{variation.variant_label}}
         </button>
         {% endfor %}
@@ -63,10 +62,8 @@
                 {% endfor %}
             </div>
             <div class="carousel-controls">
-                <button type="button"
-                    onclick="moveCarousel(-1, 'image-carousel-{{ variation.id }}')">&#10094;<span>&#10094;&#10094;</span></button>
-                <button type="button"
-                    onclick="moveCarousel(1, 'image-carousel-{{ variation.id }}')">&#10095;<span>&#10095;&#10095;</span></button>
+                <button type="button" onclick="moveCarousel(-1, 'image-carousel-{{ variation.id }}')">&#10094;<span>&#10094;&#10094;</span></button>
+                <button type="button" onclick="moveCarousel(1, 'image-carousel-{{ variation.id }}')">&#10095;<span>&#10095;&#10095;</span></button>
             </div>
             <script>
                 moveCarousel(0, 'image-carousel-{{ variation.id }}')
@@ -125,8 +122,8 @@
         </div>
 
         <script>
-            document.getElementById('donation-input').disabled = true
-            document.getElementById('toggle-input').checked = false
+            document.getElementById('donation-input').disabled = true;
+            document.getElementById('toggle-input').checked = false;
             document.getElementById('uid-input').value = getuid()
         </script>
     </form>

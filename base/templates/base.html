@@ -24,7 +24,6 @@
             --blue-text: #d1d1d1;
             --gold-text: #d1d1d1;
         }
-
     </style>
     {% elif site_style == "new" %}
     <style>
@@ -35,7 +34,6 @@
             --blue-text: #eee;
             --gold-text: #1a1a1a;
         }
-
     </style>
     {% elif site_style == "mute" %}
     <style>
@@ -46,7 +44,6 @@
             --blue-text: darkgrey;
             --gold-text: #333;
         }
-
     </style>
     {% elif site_style == "valentine" %}
     <style>
@@ -57,7 +54,6 @@
             --blue-text: lightgrey;
             --gold-text: lightgrey;
         }
-
     </style>
     {% endif %}
     {% block head %}
@@ -79,7 +75,9 @@
             {% endif %}
             <span>Bald Eagle FFA Plants</span>
         </a>
-        <span>Created by: Owen G. Dechow</span>
+        <span class="created">
+            <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Created by Owen Dechow</a>
+        </span>
     </nav>
     <main>
         {% block main %}
@@ -96,8 +94,7 @@
                     <a href="/product-submissions">Product Submissions</a>
                 </li>
                 <li>
-                    <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits"
-                        target="_blank">Credits</a>
+                    <a href="https://github.com/Owen-Dechow/BEAPlants?tab=readme-ov-file#credits" target="_blank">Credits</a>
                 </li>
             </ul>
         </div>
@@ -105,12 +102,12 @@
     </footer>
     <div class="cookies" id="cookies">
         <h1>This site uses cookies!</h1>
-        <span>By using this site you are accepting cookies.</span>
+        <span>By using this site you are accepting cookies. No data will be shared with third parties under any circumstances.</span>
         <button type="button" onclick="confirmCookies(event)">OK</button>
     </div>
     <script>
         if (getCookie('cookieOK') == 'true') {
-            document.querySelector('#cookies').remove()
+            document.querySelector('#cookies').remove();
         }
     </script>
 </body>

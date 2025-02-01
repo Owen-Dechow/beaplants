@@ -1,0 +1,20 @@
+{
+    "production": {
+        "django_settings": "beaplants.settings",
+        "exclude": [
+            "boto3",
+            "dateutil",
+            "botocore",
+            "s3transfer",
+            "concurrent",
+            "db.sqlite3"
+        ],
+        "profile_name": "eb-cli",
+        "project_name": "beaplants",
+        "aws_region": "us-east-1",
+        "runtime": "python3.12",
+        "s3_bucket": "beaplants",
+        "certificate_arn": "arn:aws:acm:us-east-1:975588657353:certificate/6e5606b8-b3ad-4343-99da-db8f32eff75e",
+        "domain": "beaag.com"
+    }
+}
