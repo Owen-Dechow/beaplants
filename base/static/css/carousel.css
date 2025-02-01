@@ -71,7 +71,9 @@
     background-color: var(--blue1);
     border: 1px solid;
     width: fit-content;
-    height: fit-content;
+    display: flex;
+    padding: 3px;
+    padding-bottom: 6px;
 }
 
 .carousel-controls button span {
