@@ -19,13 +19,15 @@ jmespath==1.0.1
 kappa==0.6.0
 MarkupSafe==3.0.2
 packaging==23.2
-Pillow==10.3.0
+pillow==10.3.0
 placebo==0.9.0
+psycopg2-binary==2.9.10
 python-dateutil==2.8.2
 python-slugify==8.0.4
 PyYAML==6.0.2
 requests==2.32.3
 s3transfer==0.10.0
+setuptools==75.8.0
 six==1.16.0
 sqlparse==0.5.0
 text-unidecode==1.3
