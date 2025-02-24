@@ -42,13 +42,19 @@ def str_val_2_404(
 
 ########## VIEWS ##########
 def landing_page(request: WSGIRequest):
-    season = models.Season.objects.filter().last()
-    products = models.Product.objects.select_related("season").filter(season=season)
-    products = list(sorted(products, key=lambda _: random()))
+    try:
+        season = models.Season.objects.filter().last()
+        products = models.Product.objects.select_related("season").filter(season=season)
+        products = list(sorted(products, key=lambda _: random()))
+    except:
+        season = None
+        products = None
+
     context = {
         "products": products,
         "season": season,
         "hero_info": settings.HOMEPAGE_INFO,
+        "full_footer": True,
     }
 
     return render(request, "home.html", context)
@@ -122,7 +128,11 @@ def product_page(request: WSGIRequest, id: int):
                 subject="We received your BEAPlants order!",
                 message=render_to_string(
                     "order_confirm_email.txt",
-                    {"order": order, "url": request.get_host(), "contact_info": product.season.contacts},
+                    {
+                        "order": order,
+                        "url": request.get_host(),
+                        "contact_info": product.season.contacts,
+                    },
                 ),
                 from_email=EMAIL_HOST_USER,
                 recipient_list=[order.email, EMAIL_HOST_USER],
