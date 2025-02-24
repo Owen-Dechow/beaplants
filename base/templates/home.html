@@ -8,7 +8,9 @@
 {% endblock %}
 
 {% block main %}
-{% if season.days_till_sale > 1 %}
+{% if season is None %}
+<div class="product-sales-date">Sorry, but product sales have not started yet!</div>
+{% elif season.days_till_sale > 1 %}
 <div class="product-sales-date">Sorry, but product sales do not start for {{ season.days_till_sale }} days!</div>
 {% elif season.days_till_sale == 1 %}
 <div class="product-sales-date">Sorry, but product sales do not start until tomarrow!</div>
@@ -44,10 +46,8 @@
             {% endfor %}
         </div>
         <div class="carousel-controls">
-            <button type="button"
-                onclick="moveCarousel(-1, 'product-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
-            <button type="button"
-                onclick="moveCarousel(1, 'product-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
+            <button type="button" onclick="moveCarousel(-1, 'product-carousel')">&#10094;<span>&#10094;&#10094;</span></button>
+            <button type="button" onclick="moveCarousel(1, 'product-carousel')">&#10095;<span>&#10095;&#10095;</span></button>
         </div>
         <script>
             moveCarousel(0, 'product-carousel')
@@ -76,8 +76,7 @@
         <svg width="20" height="20" viewBox="0 0 5.2916666 5.2916666">
             <g id="g2318" transform="translate(-0.2567192,0.30881838)">
                 <circle style="fill-opacity:0;stroke-width:0.5;stroke:inherit;" cx="3.401638" cy="1.8900287" r="1.7577372" />
-                <rect style="fill-opacity:0;stroke-width:0.5;stroke:inherit;" width="1.9077878" height="0.021435818" x="-2.6666815"
-                    y="3.6573761" transform="rotate(-45)" />
+                <rect style="fill-opacity:0;stroke-width:0.5;stroke:inherit;" width="1.9077878" height="0.021435818" x="-2.6666815" y="3.6573761" transform="rotate(-45)" />
             </g>
         </svg>
     </label>
@@ -89,9 +88,7 @@
 
 <div class="product-grid">
     {% for product in products %}
-    <a class="grid-item" href="/p/{{ product.id }}"
-        searchdata="{{ product.group_members }} {{ product.id }} {{ product.name }}" size="{{ product.size }}"
-        price="{{ product.price }}">
+    <a class="grid-item" href="/p/{{ product.id }}" searchdata="{{ product.group_members }} {{ product.id }} {{ product.name }}" size="{{ product.size }}" price="{{ product.price }}">
         {% if product.sold_out %}
         <span class="sold-out-warning">Sold Out</span>
         {% endif %}

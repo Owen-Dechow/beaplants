@@ -6,8 +6,7 @@
             "dateutil",
             "botocore",
             "s3transfer",
-            "concurrent",
-            "db.sqlite3"
+            "concurrent"
         ],
         "profile_name": "eb-cli",
         "project_name": "beaplants",
