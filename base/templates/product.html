@@ -55,7 +55,7 @@
         <p>Variation Id: {{variation.variant_label}}</p>
         <p>Quantity Remaining: {{variation.quantity_in_stock}}</p>
 
-        <div class="carousel" id="image-carousel-{{ variation.id }}" index="2">
+        <div class="carousel" id="image-carousel-{{ variation.id }}" index="1">
             <div class="carousel-items">
                 {% for img in images %}
                 <img class="carousel-item" src="{{ img.image.url }}" alt="Product Image" />
