@@ -1,6 +1,7 @@
 from django import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import QueryDict
+from django.shortcuts import get_object_or_404
 from django.utils.http import MultiValueDict
 from .models import Order, Season, ProductVariation, ProductImage, Product
 
@@ -30,11 +31,9 @@ class OrderForm(forms.ModelForm):
         try:
             product = ProductVariation.objects.get(id=product_id)
         except ProductVariation.DoesNotExist:
-            print("ERROR 1" * 100)
             raise forms.ValidationError("Selected Product Not Found")
 
         if product.quantity_in_stock <= 0:
-            print("ERROR 2" * 100)
             raise forms.ValidationError("Product Sold Out")
 
         if not product.product.in_season():
@@ -154,7 +153,14 @@ class ProductFormFamily:
 
             variant_data[var_id][key] = val
 
-        self.product_form = ProductForm(normal_data, normal_files)
+        self.product_form = ProductForm(
+            normal_data,
+            normal_files,
+            instance=Product(
+                season=get_object_or_404(Season.objects.all().order_by("-id"))
+            ),
+        )
+
         for key, val in variant_data.items():
             self.variation_forms.append(
                 ProductVariationForm(
@@ -177,16 +183,17 @@ class ProductFormFamily:
 
 class ProductForm(forms.ModelForm):
     group_members = forms.JSONField(widget=forms.TextInput)
+    submission_key = forms.CharField(max_length=11)
 
     class Meta:
         model = Product
-        fields = ["name", "logo", "production_cost", "season", "group_members"]
+        fields = ["name", "logo", "description", "production_cost", "group_members"]
 
-    def clean_add_key(self) -> dict:
-        if self.instance.season.add_key != self.cleaned_data["add_key"]:
+    def clean_submission_key(self) -> dict:
+        if self.instance.season.add_key != self.cleaned_data["submission_key"]:
             raise forms.ValidationError("Add key is invalid.")
 
-        return self.cleaned_data["add_key"]
+        return self.cleaned_data["submission_key"]
 
     def clean_group_members(self) -> dict:
         try:

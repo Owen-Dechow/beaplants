@@ -214,7 +214,7 @@ def pull_data(request: WSGIRequest, seasonID):
     product_views = models.ProductView.objects.select_related("product").filter(
         season=season
     )
-    products = models.ProductVariation.objects.filter(season=season)
+    products = models.Product.objects.filter(season=season)
     orders = models.Order.objects.select_related("product").filter(season=season)
 
     with BytesIO() as output:
@@ -234,7 +234,7 @@ def pull_data(request: WSGIRequest, seasonID):
         )
         workbook.write_sheet(
             "Products",
-            ["group_members", "name", "size", "production_cost", "description"],
+            ["group_members", "name", "production_cost", "description"],
             products,
         )
         workbook.write_sheet(

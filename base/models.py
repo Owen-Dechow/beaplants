@@ -39,8 +39,6 @@ class Season(models.Model):
             if days_past_start.days >= key:
                 current_section = max(current_section, key)
 
-        print(current_section)
-
         return self.markup[str(current_section)]
 
     def valid_markup_json(self):
