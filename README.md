@@ -9,7 +9,6 @@ Link: [https://beaAg.com](https://beaAg.com)
 * [Owen Dechow](https://github.com/Owen-Dechow): Website creator
 * [Bald Eagle](https://www.beasd.org/): FFA Chapter
 * [Django](https://www.djangoproject.com/): Webframework
-* [Django Debug Toolbar](https://github.com/jazzband/django-debug-toolbar): Development tools
 * [Django Environ](https://django-environ.readthedocs.io/en/latest/): Security/Privacy tools
 * [Pillow](https://python-pillow.org/): Media tools
 * [Whitenoise](https://github.com/evansd/whitenoise): Media tools
