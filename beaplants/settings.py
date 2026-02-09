@@ -197,3 +197,5 @@ HOMEPAGE_INFO = env(
     "HOMEPAGE_INFO",
     str,
 )
+
+APPEND_SLASH = True
