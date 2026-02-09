@@ -1,4 +1,4 @@
-# BEAPlants
+# BeaAg
 
 A website to sell planters made by BEASD intro to Ag. students & collect marketing data base client interactions.
 

@@ -15,8 +15,6 @@ class YourModelAdmin(admin.ModelAdmin):
 
 admin.site.register(models.ProductVariation, YourModelAdmin)
 admin.site.register(models.Season)
-admin.site.register(models.Filter)
 admin.site.register(models.Order)
 admin.site.register(models.Product)
-admin.site.register(models.ProductView)
 admin.site.register(models.ProductImage)

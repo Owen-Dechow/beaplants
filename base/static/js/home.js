@@ -1,3 +1,9 @@
+// @ts-check
+
+/**
+ * @param {string[]} keywords
+ * @param {string} data
+ */
 function overlap(keywords, data) {
     let found = false;
 
@@ -10,12 +16,36 @@ function overlap(keywords, data) {
     return found;
 }
 
-function applySorting(_event, sendData = true) {
-    let sortOrder = document.getElementById("sort").value;
-    let sizeFilter = document.getElementById("filter-size").value;
-    let search = document.getElementById("search").value.toLowerCase().split(" ");
-    let products = document.getElementsByClassName("grid-item");
-    let productGrid = document.getElementsByClassName("product-grid")[0];
+/**
+ * @param {string} q
+ */
+function $ipt(q) {
+    let elem = /** @type {HTMLInputElement} */(document.querySelector(q));
+
+    if (elem)
+        return elem;
+    else
+        throw Error(`"${q}" is not a valid query.`);
+}
+
+/**
+ * @param {string} q
+ */
+function $(q) {
+    let elem = /** @type {NodeListOf<HTMLElement>} */(document.querySelectorAll(q));
+
+    if (elem)
+        return elem;
+    else
+        throw Error(`"${q}" is not a valid query.`);
+}
+
+function applySorting() {
+    let sortOrder = $ipt("#sort").value;
+    let sizeFilter = $ipt("#filter-size").value;
+    let search = $ipt("#search").value.toLowerCase().split(" ");
+    let products = $(".grid-item");
+    let productGrid = $(".product-grid")[0];
 
     // Filtering & Search
     for (let idx = 0; idx < products.length; idx++) {
@@ -29,7 +59,7 @@ function applySorting(_event, sendData = true) {
         }
 
         if (search.length > 0) {
-            if (!overlap(search, item.getAttribute("searchdata").toLowerCase()))
+            if (!overlap(search, (item.getAttribute("searchdata") || "").toLowerCase()))
                 item.style.display = "none";
         }
     }
@@ -51,17 +81,13 @@ function applySorting(_event, sendData = true) {
         productGrid.innerHTML = "";
         productList.forEach(item => productGrid.append(item));
     }
-
-    // Send data
-    if (sendData)
-        fetch(`/filter/${encodeURIComponent(getuid())}/${encodeURIComponent(sizeFilter)}/${encodeURIComponent(sortOrder)}/s${encodeURIComponent(search)}`);
 }
 
 
-function clearSorting(event) {
-    document.getElementById("sort").value = "random";
-    document.getElementById("filter-size").value = "none";
-    document.getElementById("search").value = "";
+function clearSorting() {
+    $ipt("#sort").value = "random";
+    $ipt("#filter-size").value = "none";
+    $ipt("#search").value = "";
 
-    applySorting(event, false);
+    applySorting();
 }

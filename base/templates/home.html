@@ -13,7 +13,7 @@
 {% elif season.days_till_sale > 1 %}
 <div class="product-sales-date">Sorry, but product sales do not start for {{ season.days_till_sale }} days!</div>
 {% elif season.days_till_sale == 1 %}
-<div class="product-sales-date">Sorry, but product sales do not start until tomarrow!</div>
+<div class="product-sales-date">Sorry, but product sales do not start until tomorrow!</div>
 {% endif %}
 
 <div class="top-section">
@@ -38,7 +38,7 @@
                 <img src="{{ product.logo.url }}" />
                 <span class="product-info">{{ product.name }}: {{ product.formatted_price }}</span>
                 <span class="product-info">
-                    Framers:{% for first, last in product.group_members.items %}
+                    Creators: {% for first, last in product.group_members.items %}
                     {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 </span>
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<form class="filters" onsubmit="applySorting(event); return false;">
+<form class="filters" onsubmit="applySorting(); return false;">
     {% csrf_token %}
     <label for="sort">Sort By:</label>
     <select name="sort" id="sort">
@@ -83,7 +83,7 @@
     <input type="text" id="search" />
 
     <button type="submit">APPLY <span>&#10095;&#10095;</span></button>
-    <button type="button" onclick="clearSorting(event)">CLEAR <span>&#10095;&#10095;</span></button>
+    <button type="button" onclick="clearSorting()">CLEAR <span>&#10095;&#10095;</span></button>
 </form>
 
 <div class="product-grid">
@@ -96,7 +96,7 @@
         <span class="product-info">{{ product.name }}</span>
         <span class="product-info">{{ product.formatted_price }}</span>
         <span class="product-info">
-            Framers:{% for first, last in product.group_members.items %}
+            Creators: {% for first, last in product.group_members.items %}
             {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
             {% endfor %}
         </span>

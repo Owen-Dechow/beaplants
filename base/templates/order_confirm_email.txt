@@ -1,5 +1,5 @@
 Thank you for your order!
-Your order for one {{ order.product.product.name }}:{{ order.product.variant_label }} from BEAPlants ({{ url }}) has been received.
+Your order for one {{ order.product.product.name }}:{{ order.product.variant_label }} from {{ url }} has been received.
 
 Please confirm the following information:
   Your name: {{ order.name }}

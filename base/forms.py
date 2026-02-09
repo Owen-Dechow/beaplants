@@ -1,8 +1,7 @@
 from django import forms
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
-from django.utils.http import MultiValueDict
+from django.utils.datastructures import MultiValueDict
 from .models import Order, Season, ProductVariation, ProductImage, Product
 
 
@@ -22,7 +21,7 @@ class OrderForm(forms.ModelForm):
         widget=forms.HiddenInput(attrs={"id": "product-input"}), label=""
     )
     delivery_instructions = forms.CharField(
-        label="Pickup Specifactions",
+        label="Pickup Specifications",
         widget=forms.Textarea(attrs={"placeholder": "John Doe will pick this up..."}),
     )
 
@@ -100,19 +99,19 @@ class ProductFormFamily:
         normal_data = {}
         variant_data = {}
 
-        normal_files = {}
+        normal_files = MultiValueDict()
         variant_files = {}
 
         self.variation_forms = []
 
         for key, val in files.lists():
-            split_key: list[str] = key.split("-")
+            split_key_files: list[str] = key.split("-")
 
-            if split_key.__len__() < 2:
+            if split_key_files.__len__() < 2:
                 normal_files[key] = val[0]
                 continue
             else:
-                v_key = split_key[0]
+                v_key = split_key_files[0]
 
             if not v_key.startswith(prefix):
                 normal_files[key] = val[0]

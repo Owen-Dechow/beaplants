@@ -13,10 +13,10 @@ PRODUCT_SIZE_OPTIONS = [
 LETTER_SET = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-def image_upload(instance, filename):
+def image_upload(_instance, filename: str):
     upload_to = "images/"
     extension = filename.split(".")[-1]
-    uid = "".join([choice(LETTER_SET) for i in range(20)])
+    uid = "".join([choice(LETTER_SET) for _i in range(20)])
 
     return upload_to + uid + "." + extension
 
@@ -25,12 +25,13 @@ class Season(models.Model):
     def __str__(self):
         return str(self.sales_date_start)
 
+    id = models.AutoField(primary_key=True)
     sales_date_start = models.DateField()
     markup = models.JSONField()
     add_key = models.CharField(max_length=20)
     contacts = models.TextField()
 
-    def get_markup(self):
+    def get_markup(self) -> float:
         days_past_start = timezone.now().date() - self.sales_date_start
         current_section = 0
 
@@ -57,7 +58,7 @@ class Season(models.Model):
     @classmethod
     def generate_key(cls):
         return "-".join(
-            "".join([choice(LETTER_SET) for j in range(3)]) for i in range(3)
+            "".join([choice(LETTER_SET) for _j in range(3)]) for _i in range(3)
         )
 
 
@@ -103,6 +104,7 @@ class ProductVariation(models.Model):
     def __str__(self):
         return f"{self.id}: {self.product.name}"
 
+    id = models.AutoField(primary_key=True)
     quantity_in_stock = models.IntegerField()
     size = models.CharField(choices=PRODUCT_SIZE_OPTIONS, max_length=20)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
@@ -129,24 +131,4 @@ class Order(models.Model):
     donation = models.FloatField(blank=True, null=True)
     user_id = models.CharField(max_length=100)
     open = models.BooleanField(default=True)
-    season = models.ForeignKey(to=Season, on_delete=models.CASCADE)
-
-
-class Filter(models.Model):
-    def __str__(self):
-        return f"({self.user_id}) | ({self.size}) | ({self.sort}) | ({self.search})"
-
-    user_id = models.CharField(max_length=100)
-    size = models.CharField(max_length=50)
-    sort = models.CharField(max_length=50)
-    search = models.TextField()
-    season = models.ForeignKey(to=Season, on_delete=models.CASCADE)
-
-
-class ProductView(models.Model):
-    def __str__(self):
-        return f"({self.user_id}) | ({self.product})"
-
-    user_id = models.CharField(max_length=100)
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
     season = models.ForeignKey(to=Season, on_delete=models.CASCADE)

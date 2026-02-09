@@ -19,11 +19,8 @@ urlpatterns = [
     ),
     path("p/<int:id>", views.product_page, name="product_page"),
     path("order-sent", views.order_sent_page, name="order_sent_page"),
-    path("filter/<str:id>/<str:size>/<str:sort>/<str:search>", views.filters),
-    path("product-view/<str:id>/<int:product>", views.product_view),
     path("delete-season/<int:seasonID>", views.delete_season),
     path("close-order/<int:orderID>", views.close_order),
-    path("pull-data/<int:seasonID>", views.pull_data),
 ] + [
     path("login", LoginView.as_view(template_name="auth/login.html"), name="login"),
     path("logout", LogoutView.as_view(template_name="auth/form.html"), name="logout"),

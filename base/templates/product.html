@@ -30,7 +30,7 @@
         <h1>{{ product.name }}</h1>
         <p>{{ product.description }}</p>
         <p>
-            Framers:{% for first, last in product.group_members.items %}
+            Creators: {% for first, last in product.group_members.items %}
             {{ first }} {{ last }}{% if not forloop.last %},{% endif %}
             {% endfor %}
         </p>
@@ -79,7 +79,7 @@
 
     {% if form.errors %}
     <div class="error-warning">
-        <h1>Oops! Somthing Went Wrong! :(</h1>
+        <h1>Oops! Something Went Wrong! :(</h1>
         <p>Check order form for more details.</p>
         <button onclick="clearParent(event)">close</button>
     </div>

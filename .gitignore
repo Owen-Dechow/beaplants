@@ -8,3 +8,4 @@ images/
 BEAPlants_accessKeys.csv
 staticfiles/
 beaplants-production-*.zip
+zappa_settings.json
