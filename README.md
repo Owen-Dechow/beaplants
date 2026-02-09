@@ -12,7 +12,6 @@ Link: [https://beaAg.com](https://beaAg.com)
 * [Django Environ](https://django-environ.readthedocs.io/en/latest/): Security/Privacy tools
 * [Pillow](https://python-pillow.org/): Media tools
 * [Whitenoise](https://github.com/evansd/whitenoise): Media tools
-* [XlsxWriter](https://github.com/jmcnamara/XlsxWriter): .xlsx file tools
 
 ## Information
 
